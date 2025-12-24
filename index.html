@@ -250,65 +250,7 @@
         }
 
         /* Share Modal */
-        #super-share-modal {
-            display: none;
-            position: fixed; 
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.9);
-            z-index: 2147483647 !important;
-            justify-content: center; align-items: center;
-        }
-        #super-share-modal.visible {
-            display: flex !important;
-        }
-        .share-content {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            border: 2px solid #d4af37;
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            color: #ffd700;
-            font-family: 'Cinzel', serif;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-        .share-content h2 { margin-top: 0; font-size: 24px; color: #fff; }
-        .share-input-group { margin: 30px 0; text-align: left; }
-        .share-input-group label { display: block; color: #aaa; margin-bottom: 10px; font-size: 12px; font-family: sans-serif; }
-        .share-input {
-            width: 100%; padding: 12px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #d4af37;
-            color: #fff;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-        }
-        .share-actions { display: flex; gap: 10px; flex-direction: column; }
-        .btn-modal {
-            padding: 12px; border: none; border-radius: 8px;
-            font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-copy { background: #d4af37; color: #000; }
-        .btn-copy:hover { background: #fff; }
-        .btn-close { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #ccc; }
-        .btn-close:hover { border-color: #fff; color: #fff; }
 
-        /* Author Credit in Modal */
-        .modal-author {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            font-size: 12px; color: rgba(255,255,255,0.6);
-        }
-        .modal-author img { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d4af37; }
-        .modal-author a { color: #d4af37; text-decoration: none; }
 
 
 
@@ -377,25 +319,7 @@
     </div>
 
     <!-- Share Modal -->
-    <!-- Share Modal -->
-    <div id="super-share-modal">
-        <div class="share-content">
-            <h2>Share the Magic</h2>
-            <div class="share-input-group">
-                <label>Send as (Your Name):</label>
-                <input type="text" id="share-name-input" class="share-input" placeholder="Enter your name...">
-            </div>
-            <div class="share-actions">
-                <button class="btn-modal btn-copy" id="btn-copy-link">Copy Link to Clipboard</button>
-                <button class="btn-modal btn-close" onclick="document.getElementById('super-share-modal').style.display='none'">Close</button>
-            </div>
-            
-            <div class="modal-author">
-                <img src="./images/image.png" alt="Logo">
-                <span>Developed by <a href="https://github.com/tanbaycu/christmas-tree" target="_blank">tanbaycu</a></span>
-            </div>
-        </div>
-    </div>
+
 
     <script type="module">
         import * as THREE from 'three';
@@ -1290,41 +1214,27 @@
             if(shareBtn) {
                 console.log("Share Button Initialized");
                 shareBtn.addEventListener('click', () => {
-                    console.log("Share Button Clicked");
-                    const modal = document.getElementById('super-share-modal');
-                    const nameInput = document.getElementById('share-name-input');
-                    const copyBtn = document.getElementById('btn-copy-link');
-                    
-                    if(userName) nameInput.value = userName; // Pre-fill if exists
-                    
-                    // Force display using inline styles
-                    modal.style.display = 'flex';
-                    
-                    console.log("Super Modal displayed");
+                    let recipient = prompt("Nhập tên người bạn muốn gửi tặng (Recipient Name):");
+                    if (recipient === null) return; // Cancelled
 
-                    // Copy Logic
-                    copyBtn.onclick = () => {
-                        let finalName = nameInput.value.trim();
-                        let shareUrl = new URL(window.location.href);
-                        
-                        if (finalName) {
-                            shareUrl.searchParams.set('name', finalName);
-                        } else {
-                            shareUrl.searchParams.delete('name');
-                        }
-                        
-                        const finalUrl = shareUrl.toString();
-                        
-                        navigator.clipboard.writeText(finalUrl).then(() => {
-                            const originalText = copyBtn.innerText;
-                            copyBtn.innerText = "Copied! ✨";
-                            copyBtn.style.background = "#fff";
-                            setTimeout(() => {
-                                copyBtn.innerText = originalText;
-                                copyBtn.style.background = "#d4af37";
-                            }, 2000);
-                        });
+                    let shareUrl = new URL(window.location.href);
+                    if (recipient) {
+                        shareUrl.searchParams.set('name', recipient);
+                    } else {
+                        shareUrl.searchParams.delete('name');
                     }
+                     
+                    const finalUrl = shareUrl.toString();
+                    // Message including Author Credit
+                    const message = `🎄 Merry Christmas ${recipient ? recipient : ''}! ✨\n\nCheck out this magical 3D Christmas Tree: ${finalUrl}\n\n(Developed by tanbaycu)`;
+
+                    navigator.clipboard.writeText(message).then(() => {
+                        alert(`Link đã được copy! Gửi cho ${recipient || 'bạn bè'} ngay nào! 🎅`);
+                    }).catch(err => {
+                        console.error('Copy failed', err);
+                        prompt("Copy link thủ công:", message);
+                    });
+                });
                 });
             }
             
