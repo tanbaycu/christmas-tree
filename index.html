@@ -250,16 +250,16 @@
         }
 
         /* Share Modal */
-        #share-modal {
+        #super-share-modal {
             display: none;
             position: fixed; 
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.9);
-            z-index: 20000 !important;
+            z-index: 2147483647 !important;
             justify-content: center; align-items: center;
         }
-        #share-modal.visible {
+        #super-share-modal.visible {
             display: flex !important;
         }
         .share-content {
@@ -377,7 +377,8 @@
     </div>
 
     <!-- Share Modal -->
-    <div id="share-modal">
+    <!-- Share Modal -->
+    <div id="super-share-modal">
         <div class="share-content">
             <h2>Share the Magic</h2>
             <div class="share-input-group">
@@ -386,7 +387,7 @@
             </div>
             <div class="share-actions">
                 <button class="btn-modal btn-copy" id="btn-copy-link">Copy Link to Clipboard</button>
-                <button class="btn-modal btn-close" onclick="document.getElementById('share-modal').style.display='none'">Close</button>
+                <button class="btn-modal btn-close" onclick="document.getElementById('super-share-modal').style.display='none'">Close</button>
             </div>
             
             <div class="modal-author">
@@ -1290,20 +1291,16 @@
                 console.log("Share Button Initialized");
                 shareBtn.addEventListener('click', () => {
                     console.log("Share Button Clicked");
-                    const modal = document.getElementById('share-modal');
+                    const modal = document.getElementById('super-share-modal');
                     const nameInput = document.getElementById('share-name-input');
                     const copyBtn = document.getElementById('btn-copy-link');
                     
                     if(userName) nameInput.value = userName; // Pre-fill if exists
                     
-                    // Force display using inline styles (NUCLEAR OPTION)
-                    document.body.appendChild(modal); // Ensure it's top-level
+                    // Force display using inline styles
                     modal.style.display = 'flex';
-                    modal.style.opacity = '1';
-                    modal.style.zIndex = '2147483647'; // Max Int
-                    modal.classList.add('visible');
                     
-                    console.log("Modal displayed via inline styles & re-parenting");
+                    console.log("Super Modal displayed");
 
                     // Copy Logic
                     copyBtn.onclick = () => {
