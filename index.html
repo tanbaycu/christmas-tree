@@ -37,15 +37,32 @@
             transition: opacity 0.8s ease-out;
         }
         .loader-text {
-            color: #d4af37; font-size: 14px; letter-spacing: 4px; margin-top: 20px;
-            text-transform: uppercase; font-weight: 100;
+            color: #d4af37; font-size: 16px; letter-spacing: 4px; margin-top: 20px;
+            text-transform: uppercase; font-weight: 300;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
         .spinner {
-            width: 40px; height: 40px; border: 1px solid rgba(212, 175, 55, 0.2); 
-            border-top: 1px solid #d4af37; border-radius: 50%; 
-            animation: spin 1s linear infinite;
+            width: 50px; height: 50px; border: 2px solid rgba(212, 175, 55, 0.1); 
+            border-top: 2px solid #d4af37; border-radius: 50%; 
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #wishes-container {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            color: #fceea7;
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(252, 238, 167, 0.4);
+            opacity: 0;
+            transition: opacity 2s ease;
+            pointer-events: none;
+            z-index: 15;
+        }
 
         /* Typography */
         h1 { 
@@ -79,34 +96,47 @@
         }
 
         .upload-btn {
-            background: rgba(20, 20, 20, 0.6); 
-            border: 1px solid rgba(212, 175, 55, 0.4); 
+            background: #222; 
+            border: 4px solid #d4af37; 
+            border-image: linear-gradient(to bottom, #d4af37, #996515) 1;
             color: #d4af37; 
-            padding: 10px 20px; 
+            padding: 15px 20px; 
             cursor: pointer; 
             text-transform: uppercase; 
-            letter-spacing: 2px; 
+            letter-spacing: 1px; 
+            font-family: 'Press Start 2P', cursive; /* Pixel Font */
             font-size: 10px;
-            transition: all 0.4s;
+            font-weight: normal;
+            transition: all 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
-            min-width: 120px;
+            min-width: 160px;
+            box-shadow: 4px 4px 0px #000;
+            image-rendering: pixelated;
         }
         .upload-btn:hover { 
             background: #d4af37; 
             color: #000; 
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+        }
+        .upload-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 0px 0px 0px #000;
         }
         
         .hint-text {
-            color: rgba(212, 175, 55, 0.5);
-            font-size: 9px;
+            color: #fff;
+            font-size: 11px;
             letter-spacing: 1px;
             text-transform: uppercase;
             text-align: right;
-            margin-top: 5px;
+            margin-top: 8px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.4);
+            padding: 4px 8px;
+            border-radius: 4px;
         }
 
         input[type="file"] { display: none; }
@@ -146,12 +176,64 @@
             font-family: monospace;
             background: rgba(0,0,0,0.5);
             padding: 2px 5px;
-            pointer-events: none;
+        #gift-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Premium Dark Gradient */
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #ffd700;
+            font-family: 'Cinzel', serif;
+            display: none;
+            z-index: 300;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.4);
+            width: 300px;
+            max-width: 90%;
+        }
+        
+        #gift-title {
+            font-size: 18px; color: #fff; text-transform: uppercase;
+            margin-bottom: 20px; border-bottom: 1px solid rgba(212,175,55,0.3);
+            padding-bottom: 10px;
+        }
+        
+        #gift-message { 
+            font-size: 20px; line-height: 1.5; 
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        
+        .close-gift {
+            background: #d4af37; 
+            border: none;
+            color: #000;
+            padding: 10px 25px; 
+            cursor: pointer; 
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            text-transform: uppercase; 
+            border-radius: 5px;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #996515;
+        }
+        .close-gift:hover { 
+            background: #fff; 
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #996515;
+        }
+        .close-gift:active {
+            transform: translateY(4px);
+            box-shadow: none;
         }
     </style>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     </style>
 
     <script type="importmap">
@@ -168,13 +250,14 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <div class="loader-text">Loading Memories</div>
+        <div class="loader-text" id="loader-text">Initializing Magic...</div>
     </div>
 
     <div id="canvas-container"></div>
 
     <div id="ui-layer">
         <h1>Merry Christmas</h1>
+        <div id="wishes-container">May your days be merry and bright!</div>
         
         <div class="controls-wrapper">
             <div class="btn-group">
@@ -187,10 +270,20 @@
                     Select Files
                     <input type="file" id="file-input" multiple accept="image/*">
                 </label>
+                
+                <div class="upload-btn" id="share-btn">
+                    Share
+                </div>
             </div>
             <div class="hint-text">Use "Select Folder" to load all photos at once</div>
             <div class="hint-text" style="opacity: 0.7; font-size: 8px;">Or put photos in "./images/" (1.jpg - 30.jpg)</div>
         </div>
+    </div>
+
+    <div id="gift-overlay">
+        <div id="gift-title">🎁 You opened a gift!</div>
+        <div id="gift-message">Message</div>
+        <button class="close-gift" onclick="window.closeGift()">Thanks!</button>
     </div>
 
     <div id="webcam-wrapper">
@@ -241,7 +334,8 @@
             focusIndex: -1, 
             focusTarget: null,
             hand: { detected: false, x: 0, y: 0 },
-            rotation: { x: 0, y: 0 } 
+            rotation: { x: 0, y: 0 },
+            giftOpen: false 
         };
 
         let scene, camera, renderer, composer;
@@ -252,24 +346,101 @@
         let handLandmarker, video;
         let caneTexture; 
         const debugInfo = document.getElementById('debug-info');
+        const loaderText = document.getElementById('loader-text');
+        const wishesContainer = document.getElementById('wishes-container');
+
+        const loadingPhrases = [
+            "Summoning Reindeer...",
+            "Brewing Hot Cocoa...",
+            "Wrapping Digital Gifts...",
+            "Polishing the Stars...",
+            "Catching Snowflakes...",
+            "Tuning Jingle Bells..."
+        ];
+
+        const christmasWishes = [
+            "May your holidays be filled with warmth and cheer! ✨",
+            "Wishing you a season of love and harmony. 🎄",
+            "May your Christmas sparkle with moments of love. 🌟",
+            "Have a holly, jolly Christmas! 🎅",
+            "Peace, Joy, and Love to you and your family. ❤️"
+        ];
+        
+        const giftMessages = [
+            "🎁 A surprise gift of Joy! Have a wonderful year ahead!",
+            "🎁 You found a box of Laughter! Keep smiling!",
+            "🎁 This box contains Good Health! Wishing you the best!",
+            "🎁 A bundle of Success! May you achieve your goals!",
+            "🎁 Pure Happiness inside! Enjoy the moment!"
+        ];
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userName = urlParams.get('name'); // e.g., ?name=John
+
+        // Global Close Gift Function - reset everything clearly
+        window.closeGift = function() {
+            document.getElementById('gift-overlay').style.display = 'none';
+            STATE.giftOpen = false;
+            STATE.focusTarget = null;
+            STATE.mode = 'TREE'; 
+        };
+
+        // Cycle loading text
+        let loadInterval = setInterval(() => {
+            if(loaderText) {
+                loaderText.innerText = loadingPhrases[Math.floor(Math.random() * loadingPhrases.length)];
+            }
+        }, 800);
 
         async function init() {
-            initThree();
-            setupEnvironment(); 
-            setupLights();
-            createTextures();
-            createParticles(); 
-            createDust();     
-            loadPredefinedImages();
-            setupPostProcessing();
-            setupEvents();
-            await initMediaPipe();
-            
-            const loader = document.getElementById('loader');
-            loader.style.opacity = 0;
-            setTimeout(() => loader.remove(), 800);
+            try {
+                // Personalize Header
+                if (userName) {
+                    const h1 = document.querySelector('#ui-layer h1');
+                    if(h1) h1.innerText = `Merry Christmas, ${userName}!`;
+                    if(loaderText) loaderText.innerText = `Preparing Magic for ${userName}...`;
+                }
 
-            animate();
+                // Camera Permission Prompt
+                setTimeout(() => {
+                     if(loaderText) loaderText.innerText = (userName ? `${userName}, ` : "") + "Please Allow Camera Access 📷";
+                }, 2000);
+
+                // Set random wish
+                wishesContainer.innerText = christmasWishes[Math.floor(Math.random() * christmasWishes.length)];
+                
+                initThree();
+                setupEnvironment(); 
+                setupLights();
+                createTextures();
+                createParticles(); 
+                createDust();     
+                createParticles(); 
+            createDust();
+            createGiftBoxes(); // Add gifts
+            loadPredefinedImages();
+                setupPostProcessing();
+                setupEvents();
+                
+                console.log("Initializing MediaPipe...");
+                await initMediaPipe();
+                console.log("MediaPipe Initialized.");
+                
+                const loader = document.getElementById('loader');
+                clearInterval(loadInterval);
+                loader.style.opacity = 0;
+                setTimeout(() => {
+                    if(loader) loader.remove();
+                    if(wishesContainer) wishesContainer.style.opacity = 1; 
+                }, 800);
+
+                console.log("Starting Animation Loop...");
+                animate();
+            } catch (error) {
+                console.error("Critical Init Error:", error);
+                const loaderText = document.getElementById('loader-text');
+                if(loaderText) loaderText.innerText = "Error: " + error.message;
+            }
         }
 
         // --- Enhanced Image Loading System ---
@@ -462,7 +633,11 @@
                 } else if (mode === 'TREE') {
                     if (this.type === 'PHOTO') {
                         this.mesh.lookAt(0, this.mesh.position.y, 0);
+                        this.mesh.lookAt(0, this.mesh.position.y, 0);
                         this.mesh.rotateY(Math.PI);
+                    } else if (this.type === 'GIFT') {
+                         this.mesh.rotation.y += 1.0 * dt; // Gifts spin faster
+                         this.mesh.rotation.x = Math.sin(clock.elapsedTime * 2 + this.mesh.id) * 0.2;
                     } else {
                         this.mesh.rotation.x = THREE.MathUtils.lerp(this.mesh.rotation.x, 0, dt);
                         this.mesh.rotation.z = THREE.MathUtils.lerp(this.mesh.rotation.z, 0, dt);
@@ -481,7 +656,12 @@
                 } else if (mode === 'SCATTER' && this.type === 'PHOTO') {
                     s = this.baseScale * 2.5; 
                 } else if (mode === 'FOCUS') {
-                    if (this.mesh === focusTargetMesh) s = 4.5; 
+                    if (this.mesh === focusTargetMesh) {
+                     if(this.type === 'GIFT') {
+                             s = 2.0;
+                         }
+                         else s = 4.5; 
+                    }  
                     else s = this.baseScale * 0.8; 
                 }
                 
@@ -512,6 +692,48 @@
 
                 p.posTree.set(Math.cos(angle) * r, y, Math.sin(angle) * r);
             });
+        }
+
+        function createGiftMesh() {
+            const group = new THREE.Group();
+            
+            // Box
+            const boxGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+            const boxMat = new THREE.MeshStandardMaterial({ 
+                color: Math.random() > 0.5 ? 0xff0000 : 0x00ff00, 
+                roughness: 0.3, metalness: 0.1 
+            });
+            const box = new THREE.Mesh(boxGeo, boxMat);
+            group.add(box);
+            
+            // Ribbons
+            const ribMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.2, metalness: 0.8 });
+            const rib1 = new THREE.Mesh(new THREE.BoxGeometry(1.25, 1.25, 0.3), ribMat);
+            const rib2 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.25, 1.25), ribMat);
+            group.add(rib1);
+            group.add(rib2);
+            
+            return group;
+        }
+
+        function createGiftBoxes() {
+            // Add 8 Gift Boxes
+            for(let i=0; i<8; i++) {
+                const giftMesh = createGiftMesh();
+                mainGroup.add(giftMesh);
+                
+                // Position gifts in the tree
+                const p = new Particle(giftMesh, 'GIFT');
+                // Override posTree to be more specific if needed, but random is okay for now
+                // Let's pull them slightly outward so they are visible
+                const h = CONFIG.particles.treeHeight * 0.7;
+                const y = (Math.random() * h) - (h/2);
+                const r = (CONFIG.particles.treeRadius * (1 - (y+h/2)/CONFIG.particles.treeHeight)) + 2.0;
+                const angle = Math.random() * Math.PI * 2;
+                
+                p.posTree.set(Math.cos(angle)*r, y, Math.sin(angle)*r);
+                particleSystem.push(p);
+            }
         }
 
         function createParticles() {
@@ -730,6 +952,8 @@
 
         // Core Fix: Use relative ratios instead of absolute distance
         function processGestures(result) {
+            // if (STATE.giftOpen) return; // REMOVED: This was causing freeze-like behavior
+
             if (result.landmarks && result.landmarks.length > 0) {
                 STATE.hand.detected = true;
                 const lm = result.landmarks[0];
@@ -761,22 +985,37 @@
                 // Debug display
                 debugInfo.innerText = `Size: ${handSize.toFixed(2)} | Ext: ${extensionRatio.toFixed(2)} | Pinch: ${pinchRatio.toFixed(2)} | Mode: ${STATE.mode}`;
 
-                
-                if (extensionRatio < 1.5) {
-                    
-                    STATE.mode = 'TREE';
-                    STATE.focusTarget = null;
-                } else if (pinchRatio < 0.35) {
-                    
-                    if (STATE.mode !== 'FOCUS') {
-                        STATE.mode = 'FOCUS';
-                        const photos = particleSystem.filter(p => p.type === 'PHOTO');
-                        if (photos.length) STATE.focusTarget = photos[Math.floor(Math.random()*photos.length)].mesh;
+                // Only change modes if gift is NOT open
+                if (!STATE.giftOpen) {
+                    if (extensionRatio < 1.5) {
+                        STATE.mode = 'TREE';
+                        STATE.focusTarget = null;
+                    } else if (pinchRatio < 0.35) {
+                        if (STATE.mode !== 'FOCUS') {
+                            STATE.mode = 'FOCUS';
+                            const interactables = particleSystem.filter(p => p.type === 'PHOTO' || p.type === 'GIFT');
+                            if (interactables.length) {
+                                const target = interactables[Math.floor(Math.random()*interactables.length)];
+                                STATE.focusTarget = target.mesh;
+                                
+                                if(target.type === 'GIFT') {
+                                    // Show Gift Message
+                                    setTimeout(() => {
+                                        // Check if we are still focusing on the gift AND it's not already open
+                                        if (STATE.mode === 'FOCUS' && STATE.focusTarget === target.mesh && !STATE.giftOpen) {
+                                            STATE.giftOpen = true;
+                                            const msg = giftMessages[Math.floor(Math.random() * giftMessages.length)];
+                                            document.getElementById('gift-message').innerText = msg;
+                                            document.getElementById('gift-overlay').style.display = 'block';
+                                        }
+                                    }, 800); 
+                                }
+                            }
+                        }
+                    } else if (extensionRatio > 1.7) {
+                        STATE.mode = 'SCATTER';
+                        STATE.focusTarget = null;
                     }
-                } else if (extensionRatio > 1.7) {
-                    
-                    STATE.mode = 'SCATTER';
-                    STATE.focusTarget = null;
                 }
             } else {
                 STATE.hand.detected = false;
@@ -803,6 +1042,36 @@
                     if(webcam) webcam.classList.toggle('ui-hidden');
                 }
             });
+
+            const shareBtn = document.getElementById('share-btn');
+            if(shareBtn) {
+                shareBtn.addEventListener('click', () => {
+                     let shareName = prompt("Enter your name to personalize the message:", userName || "");
+                     let shareUrl = new URL(window.location.href);
+                     
+                     if (shareName) {
+                         shareUrl.searchParams.set('name', shareName);
+                     } else {
+                         shareUrl.searchParams.delete('name');
+                     }
+                     
+                     const finalUrl = shareUrl.toString();
+                     const shareTitle = shareName ? `Merry Christmas from ${shareName}!` : 'My 3D Christmas Tree';
+
+                     if (navigator.share) {
+                        navigator.share({
+                            title: shareTitle,
+                            text: `Check out this magical 3D Christmas Tree! 🎄✨ ${shareName ? 'Sent by ' + shareName : ''}`,
+                            url: finalUrl
+                        }).catch(console.error);
+                    } else {
+                        // Fallback
+                        navigator.clipboard.writeText(finalUrl).then(() => {
+                            alert(`Link for "${shareName || 'Guest'}" copied to clipboard! \nSend it to your friends! 🎄`);
+                        });
+                    }
+                });
+            }
         }
 
         function animate() {
