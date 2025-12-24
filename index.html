@@ -8,7 +8,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Luxury Tree - Adaptive Hand Gestures</title>
+    <title>Magical 3D Christmas Tree - Interactive Wishes</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Experience a magical interactive 3D Christmas Tree. Open gifts with hand gestures, discover personalized wishes, and share the joy! Built with Three.js and MediaPipe.">
+    <meta name="keywords" content="Christmas Tree 3D, Interactive WebGL, Hand Tracking, Holiday Wishes, Digital Gift, tanbaycu">
+    <meta name="author" content="tanbaycu">
+    <link rel="icon" type="image/png" href="./images/image.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://caythongnoem.vercel.app/">
+    <meta property="og:title" content="Magical 3D Christmas Tree - Interactive Wishes">
+    <meta property="og:description" content="Discover a world of floating gifts and starry lights. Use your hands to open gifts and reveal magical holiday wishes!">
+    <meta property="og:image" content="./images/image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://caythongnoem.vercel.app/">
+    <meta property="twitter:title" content="Magical 3D Christmas Tree - Interactive Wishes">
+    <meta property="twitter:description" content="Discover a world of floating gifts and starry lights. Use your hands to open gifts and reveal magical holiday wishes!">
+    <meta property="twitter:image" content="./images/image.png">
     <style>
         body { margin: 0; overflow: hidden; background-color: #000000; font-family: 'Times New Roman', serif; }
         #canvas-container { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; }
@@ -228,6 +248,44 @@
             transform: translateY(4px);
             box-shadow: none;
         }
+
+        /* Author Footer */
+        .author-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(4px);
+        }
+        .author-footer a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+        .author-footer a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #d4af37;
+        }
+        .author-logo {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            border: 1px solid #d4af37;
+        }
+
+
     </style>
     
     <style>
@@ -290,6 +348,12 @@
         <video id="webcam" autoplay playsinline></video>
         <div id="debug-info">Initializing...</div>
         <canvas id="webcam-preview" style="display:none;"></canvas>
+    </div>
+
+    <!-- Author Attribution -->
+    <div class="author-footer">
+        <img src="./images/image.png" alt="Logo" class="author-logo">
+        <span>Developed by <a href="https://github.com/tanbaycu/christmas-tree" target="_blank">tanbaycu</a></span>
     </div>
 
     <script type="module">
