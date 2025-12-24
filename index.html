@@ -1,5 +1,6 @@
 <!--
   @Project: Christmas Tree 3D
+  @Author: tanbaycu
   @Date: 2025-12-24
 -->
 <!DOCTYPE html>
@@ -207,6 +208,7 @@
         import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'; 
         import { FilesetResolver, HandLandmarker } from '@mediapipe/tasks-vision';
 
+        // --- Core Configuration ---
         const CONFIG = {
             colors: {
                 bg: 0x000000, 
@@ -226,10 +228,10 @@
                 autoScanLocal: true,
                 scanCount: 200, 
                 images: [
-                    'https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=600', 
-                    'https://images.unsplash.com/photo-1576919228236-a097c32a5cd4?q=80&w=600',
-                    'https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=600', 
-                    'https://images.unsplash.com/photo-1482638588057-dce9509db949?q=80&w=600'
+                    'https://images.unsplash.com/photo-1544967082-d9d25d867d66?q=80&w=600', 
+                    'https://images.unsplash.com/photo-1607567144415-8422204c965f?q=80&w=600',
+                    'https://images.unsplash.com/photo-1512418490979-92798cec1380?q=80&w=600', 
+                    'https://images.unsplash.com/photo-1575306660662-7935492d0910?q=80&w=600'
                 ]
             }
         };
@@ -270,6 +272,7 @@
             animate();
         }
 
+        // --- Enhanced Image Loading System ---
         function loadPredefinedImages() {
             const loader = new THREE.TextureLoader();
             CONFIG.preload.images.forEach(url => {
@@ -725,6 +728,7 @@
             requestAnimationFrame(predictWebcam);
         }
 
+        // Core Fix: Use relative ratios instead of absolute distance
         function processGestures(result) {
             if (result.landmarks && result.landmarks.length > 0) {
                 STATE.hand.detected = true;
@@ -735,32 +739,42 @@
                 const thumb = lm[4]; 
                 const index = lm[8]; 
                 const wrist = lm[0];
+                const middleMCP = lm[9]; // Middle finger knuckle
 
+                // 1. Calculate hand size baseline (distance from wrist to middle knuckle)
                 const handSize = Math.hypot(middleMCP.x - wrist.x, middleMCP.y - wrist.y);
                 if (handSize < 0.02) return;
 
+                // 2. Calculate average extension distance of fingertips
                 const tips = [lm[8], lm[12], lm[16], lm[20]];
                 let avgTipDist = 0;
                 tips.forEach(t => avgTipDist += Math.hypot(t.x - wrist.x, t.y - wrist.y));
                 avgTipDist /= 4;
 
+                // 3. Calculate pinch distance (thumb to index)
                 const pinchDist = Math.hypot(thumb.x - index.x, thumb.y - index.y);
 
+                // 4. Calculate relative ratios
                 const extensionRatio = avgTipDist / handSize;
                 const pinchRatio = pinchDist / handSize;
 
+                // Debug display
                 debugInfo.innerText = `Size: ${handSize.toFixed(2)} | Ext: ${extensionRatio.toFixed(2)} | Pinch: ${pinchRatio.toFixed(2)} | Mode: ${STATE.mode}`;
 
+                
                 if (extensionRatio < 1.5) {
+                    
                     STATE.mode = 'TREE';
                     STATE.focusTarget = null;
                 } else if (pinchRatio < 0.35) {
+                    
                     if (STATE.mode !== 'FOCUS') {
                         STATE.mode = 'FOCUS';
                         const photos = particleSystem.filter(p => p.type === 'PHOTO');
                         if (photos.length) STATE.focusTarget = photos[Math.floor(Math.random()*photos.length)].mesh;
                     }
                 } else if (extensionRatio > 1.7) {
+                    
                     STATE.mode = 'SCATTER';
                     STATE.focusTarget = null;
                 }
