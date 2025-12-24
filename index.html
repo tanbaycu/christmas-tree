@@ -10,6 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical 3D Christmas Tree - Interactive Wishes</title>
     
+    <!-- Redirect to Mobile if detected -->
+    <script>
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            window.location.href = "mobile.html" + window.location.search;
+        }
+    </script>
+    
     <!-- SEO Meta Tags -->
     <meta name="description" content="Experience a magical interactive 3D Christmas Tree. Open gifts with hand gestures, discover personalized wishes, and share the joy! Built with Three.js and MediaPipe.">
     <meta name="keywords" content="Christmas Tree 3D, Interactive WebGL, Hand Tracking, Holiday Wishes, Digital Gift, tanbaycu">
